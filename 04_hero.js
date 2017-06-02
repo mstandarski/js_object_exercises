@@ -31,16 +31,77 @@
  * name of your choice.
  */
 
-
+//The below code is from Eric's demo in class.
  (function(){
     //@see https://stackoverflow.com/questions/1335851/what-does-use-strict-do-in-javascript-and-what-is-the-reasoning-behind-it
     'use strict';
 
-    ///////////////////////////
-    // Put your code here!
-    ///////////////////////////
 
-    
+    function LivingThing(name, health){
+            var name = name;
+            var health = health;
+
+            this.isAlive = function(){
+                return Boolean(health);
+            }
+
+            this.getName = function(){
+                return name;
+            }
+
+            this.getHealth = function(){
+                return health;
+            }
+
+            this.setHealth = function(newHealth){
+                if(newHealth <= 0 ){
+                    newHealth = 0;
+                }
+                health = newHealth;
+            }
+        }
+
+        let creature1 = new LivingThing("Rat", 5);
+        let creature2 = new LivingThing("Goblin", 30);
+        let creature3 = new LivingThing("Ogre", 80);
+
+        var monsters = [creature1, creature2, creature3]
+
+        function getRandomInt(min, max) {
+          min = Math.ceil(min);
+          max = Math.floor(max);
+          return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        function Hero(name, health) {
+          LivingThing.call(this, name, health);
+
+          this.attack = function(LivingThing){
+            let heroDamage = getRandomInt(0,10);
+            let livingThingDamage = getRandomInt(0,10);
+
+            this.setHealth(this.getHealth() - heroDamage);
+            LivingThing.setHealth(LivingThing.getHealth() - livingThingDamage);
+
+            console.log(this.getName() + "'s health (" + this.getHealth() + ") reduced by: " + heroDamage);
+            console.log(LivingThing.getName() + "'s health (" + LivingThing.getHealth() + ") reduced by: " + livingThingDamage);
+          }
+
+          this.fight = function(livingThingArray){
+            for (let i=0; i < livingThingArray.length; i++) {
+
+                while(this.isAlive() && livingThingArray[i].isAlive()){
+                    this.attack(livingThingArray[i])
+                }
+
+                if(!this.isAlive()){
+                    break;
+                }
+            }
+          }
+        }
+
+        let hero = new Hero("superman", 100)
 
     //The code below should work when you are done
     console.log("A hero emerges!");
